@@ -1,0 +1,16 @@
+{
+  "name": "eve-status",
+  "version": "0.1.0",
+  "author": "Felipe 'Pyron' Martin <me@fmartingr.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fmartingr/eve-status.git"
+  },
+  "dependencies" : {
+    "elementtree"   :  "*"
+  },
+  "license": "GPLv2",
+  "engines": {
+    "node": ">=0.6"
+  }
+}
