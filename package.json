@@ -1,6 +1,6 @@
 {
   "name": "eve-status",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Felipe 'Pyron' Martin <me@fmartingr.com>",
   "repository": {
     "type": "git",
@@ -14,5 +14,8 @@
   "license": "GPLv2",
   "engines": {
     "node": ">=0.6"
+  },
+  "scripts": {
+    "start": "node app.js"
   }
 }
