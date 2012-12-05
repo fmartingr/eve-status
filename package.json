@@ -7,7 +7,9 @@
     "url": "https://github.com/fmartingr/eve-status.git"
   },
   "dependencies" : {
-    "elementtree"   :  "*"
+    "elementtree"   :  "*",
+    "moment": "*",
+    "express": "*"
   },
   "license": "GPLv2",
   "engines": {
