@@ -2,9 +2,65 @@
 <html lang="en-US">
 <head>
 	<meta charset="UTF-8">
-	<title></title>
+	<title>Eve-Status</title>
+	<style>
+		body {
+			text-align: center;
+			font-family: Arial, Helvetica, sans-serif;
+		}
+		.green {
+			color: green;
+		}
+		.red {
+			color: red;
+		}
+	</style>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.0rc1/zepto.min.js"></script>
+	<script type="text/javascript">
+	function checkStatus() {
+		$.get('/status', function(data) {
+			if (data.length) {
+				status = eval('(' + data + ')')
+			} else {
+				$('.error').html('Error getting server status!')
+			}
+			updateStatus(status)
+		})
+	}
+
+	function updateStatus(data) {
+		if (data.serverOpen) {
+			$('.server-status').addClass('green').html('OPEN');
+		} else if (data.serverOpen == false) {
+			$('.server-status').addClass('red').html('CLOSED');
+		} else {
+			$('.server-status').html('--');
+		}
+		timeout = data.timeout;
+
+		$('.players').html(data.onlinePlayers || "--");
+
+		if (timeout === undefined) {
+			timeout = 60; // If can't get server status, re-check in one minute
+		}
+
+		setTimeout(checkStatus, timeout*1000);
+	}
+
+	window.onload = function() {
+		checkStatus()
+	}
+	</script>
 </head>
 <body>
-	Hello EVE STATUS
+	<h1>Eve Status</h1>
+	<small class="error red"></small>
+	<div>
+		<strong>Server Status:</strong> <span class="server-status"><i>Loading...</i></span>
+	</div>
+	<div>
+		<strong>Players:</strong> <span class="players"><i>Loading...</i></span>
+	</div>
+	<small>This site updates automatically</small>
 </body>
 </html>

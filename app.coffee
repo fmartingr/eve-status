@@ -21,7 +21,7 @@ LAST_INFO = ''
 calculateTimeout = (_until, _untilFormat='YYYY-MM-DD HH:mm:ss') ->
 	from = moment().unix()
 	to = moment(_until, _untilFormat).unix()
-	range = to - from
+	range = parseInt(to - from)
 
 ###
 # Calculate and create a timeout for the next data check
@@ -46,7 +46,7 @@ createTimeout = ->
 ###
 checkStatus = ->
 	https.get API_URL, (response) ->
-		data = ''	
+		data = ''
 		response.on 'data', (chunk) ->
 			data += chunk
 		response.on 'end', ->
@@ -60,6 +60,7 @@ checkStatus = ->
 			LAST_INFO = result
 			createTimeout()
 	.on 'error', (error) ->
+		createTimeout()
 		console.log error.message
 
 # Initial check
@@ -73,12 +74,19 @@ checkStatus()
 # Status request
 app.get '/status', (request, response) ->
 	data = LAST_INFO
-	data.timeout = calculateTimeout LAST_INFO.cachedUntil
+	data.timeout = calculateTimeout(LAST_INFO.cachedUntil) + 2 # +2 Correction (+1 from before, +1 for this)
 	response.send data
+	response.end()
 
-# Static 
+# If debug is enabled, we can force a status check (CLIENTS WONT BE UPDATED)
+if DEBUG
+	app.get '/force_check', (request, response) ->
+		checkStatus()
+		response.end()
+
+# Static HTML
 app.configure ->
     app.use express.static(__dirname + '/public')
 
-# Start server
+# Start server (AppFog)
 app.listen process.env.VCAP_APP_PORT || 3000

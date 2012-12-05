@@ -32,7 +32,7 @@
     }
     from = moment().unix();
     to = moment(_until, _untilFormat).unix();
-    return range = to - from;
+    return range = parseInt(to - from);
   };
 
   /*
@@ -79,6 +79,7 @@
         return createTimeout();
       });
     }).on('error', function(error) {
+      createTimeout();
       return console.log(error.message);
     });
   };
@@ -88,9 +89,17 @@
   app.get('/status', function(request, response) {
     var data;
     data = LAST_INFO;
-    data.timeout = calculateTimeout(LAST_INFO.cachedUntil);
-    return response.send(data);
+    data.timeout = calculateTimeout(LAST_INFO.cachedUntil) + 2;
+    response.send(data);
+    return response.end();
   });
+
+  if (DEBUG) {
+    app.get('/force_check', function(request, response) {
+      checkStatus();
+      return response.end();
+    });
+  }
 
   app.configure(function() {
     return app.use(express["static"](__dirname + '/public'));
