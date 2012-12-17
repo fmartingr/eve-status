@@ -2,6 +2,7 @@ https = require 'https'
 elementtree = require 'elementtree'
 moment = require 'moment'
 express = require 'express'
+url = require 'url'
 app = express()
 
 DEBUG = true
@@ -45,7 +46,12 @@ createTimeout = ->
 # Make a petition to the EVE Online API and get the data
 ###
 checkStatus = ->
-	https.get API_URL, (response) ->
+	requestOptions =
+		host: url.parse(API_URL).host
+		path: url.parse(API_URL).path
+		port: 443
+		method: 'GET'
+	https.request requestOptions, (response) ->
 		data = ''
 		response.on 'data', (chunk) ->
 			data += chunk
@@ -62,6 +68,7 @@ checkStatus = ->
 	.on 'error', (error) ->
 		createTimeout()
 		console.log error.message
+	.end()
 
 # Initial check
 checkStatus()
@@ -89,4 +96,4 @@ app.configure ->
     app.use express.static(__dirname + '/public')
 
 # Start server (AppFog)
-app.listen process.env.VCAP_APP_PORT || 3000
+app.listen process.env.VCAP_APP_PORT || 8080
