@@ -20,7 +20,6 @@ node app.js
 
 Head to `localhost:3000` and watch the "magic"!
 
-### NOTE
-Since neither AppFog nor dotCloud support https petitions, I can't have a working demo online!
+### Demo
 
-[Link to dotCloud demo](http://evestatus-fmartingr.dotcloud.com/) | [Link to appFog demo](http://eve-status.eu01.aws.af.cm/) (I will probably shut down this one…)
+[Link to dotCloud demo](http://evestatus-fmartingr.dotcloud.com/)
